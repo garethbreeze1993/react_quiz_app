@@ -6,6 +6,20 @@ import Quiz from "./components/Quiz"
 function App() {
     const [quiz, setQuiz] = React.useState(false);
     const [completed, setCompleted] = React.useState(false);
+    const [questions, setQuestions] = React.useState([])
+
+
+    React.useEffect(() => {
+        if(quiz){
+            fetch("https://opentdb.com/api.php?amount=10&category=9")
+                .then(res => res.json())
+                .then(data => setQuestions(data.results))
+
+        }else{
+            setQuestions([])
+        }
+
+    }, [quiz])
 
 
     function handleStartBtnClick(){
@@ -29,6 +43,7 @@ function App() {
             <Quiz
                 completed={completed}
                 handleClick={handleQuizBtnClick}
+                questions={questions}
             /> :
             <Intro
             handleClick={handleStartBtnClick}
