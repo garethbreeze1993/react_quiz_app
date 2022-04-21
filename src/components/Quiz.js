@@ -5,7 +5,7 @@ export default function Quiz(props) {
     const buttonTxt = props.completed ? "Play Again?": "Check Answers"
 
     function removeQuote(question) {
-        // Buggy way of moving quotes and apsotrophes from the JSON
+        // Buggy way of removing quotes and apostrophes from the JSON
         question = question.replaceAll("&quot;", '')
         question = question.replaceAll("&#039;", '')
         return question
@@ -22,9 +22,10 @@ export default function Quiz(props) {
         }
         const setAnswers = [...new Set(answers)]
 
-        const answerElements = setAnswers.map((answer, index) => <p key={index}>{answer}</p>)
-        return <div key={index}>
-            <p>{question_text}</p>
+        const answerElements = setAnswers.map((answer, index) =>
+            <div key={index} className={"quiz--answer"}>{removeQuote(answer)}</div>)
+        return <div key={index} className={"quiz--container"}>
+            <h5 className={"quiz--question"}>{question_text}</h5>
             {answerElements}
 
         </div>
@@ -33,7 +34,7 @@ export default function Quiz(props) {
     return (
         <main>
             {questionElements}
-            <button onClick={() => props.handleClick(props.completed)}>{buttonTxt}</button>
+            <button onClick={() => props.handleClick(props.completed)} className={"intro--button"}>{buttonTxt}</button>
         </main>
     )
 }
