@@ -26,15 +26,17 @@ function App() {
         setQuiz(true);
     }
 
-    function handleQuizBtnClick(playAgain){
+    function handleQuizBtnClick(){
+        setQuiz(false)
+        setCompleted(false)
+    }
 
-        if(playAgain){
-            setQuiz(false)
-            setCompleted(false)
-        }
-        else{
-            setCompleted(true)
-        }
+    function handleSubmit(event, questionObj, correctAnswerObj){
+        event.preventDefault();
+        // console.log('submitted')
+        // console.log(questionObj)
+        // console.log(correctAnswerObj)
+        setCompleted(true)
     }
 
     return (
@@ -44,6 +46,7 @@ function App() {
                 completed={completed}
                 handleClick={handleQuizBtnClick}
                 questions={questions}
+                handleSubmit={handleSubmit}
             /> :
             <Intro
             handleClick={handleStartBtnClick}
