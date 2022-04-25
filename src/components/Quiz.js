@@ -44,12 +44,15 @@ export default function Quiz(props) {
     }
 
     function getStyle(completed, checked, selectedAnswers, answer){
-        if(!completed || !checked){
+        if(!completed){
+            return {}
+        }else if(selectedAnswers[answer] === true){
+            return {'backgroundColor': 'green'}
+        }else if(checked){
+            return {'backgroundColor': 'red'}
+        }else{
             return {}
         }
-
-        return selectedAnswers[answer] === true ? {'backgroundColor': 'green'} : {'backgroundColor': 'red'}
-
     }
 
     const questionElements = props.questions.map((question, index) => {

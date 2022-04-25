@@ -31,6 +31,8 @@ function App() {
     function handleQuizBtnClick(){
         setQuiz(false)
         setCompleted(false)
+        setCorrectAnswers(0)
+        setAnswerSelectObj({})
     }
 
     function handleSubmit(event, questionObj, correctAnswerObj){
@@ -42,10 +44,15 @@ function App() {
             if(value === correctAnswerObj[key]){
                 setCorrectAnswers(prevCorrectAnswers => prevCorrectAnswers + 1)
                 setAnswerSelectObj(prevAnswerObj =>
-                    ({...prevAnswerObj, [value]: true}))
+                    ({...prevAnswerObj,
+                        [value]: true}))
             }else{
+                const correctAnswer = correctAnswerObj[key]
                 setAnswerSelectObj(prevAnswerObj =>
-                    ({...prevAnswerObj, [value]: false}))
+                    ({...prevAnswerObj,
+                        [value]: false,
+                        [correctAnswer]: true
+                    }))
             }
         }
         setCompleted(true)
