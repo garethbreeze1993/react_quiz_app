@@ -5,6 +5,8 @@ export default function Quiz(props) {
     const [questionObj, setQuestionObj] = React.useState({});
     const [correctAnswerObj, setCorrectAnswerObj] = React.useState({})
 
+    // console.log(props.selectedAnswers)
+
     React.useEffect(() => {
         props.questions.forEach(question => {
             const questionText = question.question
@@ -41,6 +43,15 @@ export default function Quiz(props) {
         })
     }
 
+    function getStyle(completed, checked, selectedAnswers, answer){
+        if(!completed || !checked){
+            return {}
+        }
+
+        return selectedAnswers[answer] === true ? {'backgroundColor': 'green'} : {'backgroundColor': 'red'}
+
+    }
+
     const questionElements = props.questions.map((question, index) => {
         const questionTxtQuote = question.question
         const questionText = removeQuote(question.question)
@@ -54,7 +65,8 @@ export default function Quiz(props) {
         const setAnswers = [...new Set(answers)]
 
         const answerElements = setAnswers.map((answer, index) =>
-            <div key={index} className={"quiz--answer"}>
+            <div key={index} className={"quiz--answer"}
+                 style={getStyle(props.completed, questionObj[questionTxtQuote] === answer, props.selectedAnswers, answer)}>
                 <input
                     type="radio"
                     id={answer}
@@ -62,6 +74,7 @@ export default function Quiz(props) {
                     value={answer}
                     checked={questionObj[questionTxtQuote] === answer}
                     onChange={handleFormChange}
+                    disabled={props.completed}
                 />
                 {removeQuote(answer)}
             </div>)
@@ -78,6 +91,7 @@ export default function Quiz(props) {
     return (
         <form onSubmit={(event) => props.handleSubmit(event, questionObj, correctAnswerObj)}>
             {questionElements}
+            {props.completed && <p>You scored {props.correctAnswers} out of {props.questions.length}</p>}
             { props.completed ?
             <button type={'button'} onClick={props.handleClick}
                     className={"intro--button"}>{buttonTxt}</button>

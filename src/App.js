@@ -7,6 +7,8 @@ function App() {
     const [quiz, setQuiz] = React.useState(false);
     const [completed, setCompleted] = React.useState(false);
     const [questions, setQuestions] = React.useState([])
+    const [correctAnswers, setCorrectAnswers] = React.useState(0);
+    const [answerSelectedObj, setAnswerSelectObj] = React.useState({})
 
 
     React.useEffect(() => {
@@ -36,6 +38,16 @@ function App() {
         // console.log('submitted')
         // console.log(questionObj)
         // console.log(correctAnswerObj)
+        for (const [key, value] of Object.entries(questionObj)) {
+            if(value === correctAnswerObj[key]){
+                setCorrectAnswers(prevCorrectAnswers => prevCorrectAnswers + 1)
+                setAnswerSelectObj(prevAnswerObj =>
+                    ({...prevAnswerObj, [value]: true}))
+            }else{
+                setAnswerSelectObj(prevAnswerObj =>
+                    ({...prevAnswerObj, [value]: false}))
+            }
+        }
         setCompleted(true)
     }
 
@@ -47,6 +59,8 @@ function App() {
                 handleClick={handleQuizBtnClick}
                 questions={questions}
                 handleSubmit={handleSubmit}
+                correctAnswers={correctAnswers}
+                selectedAnswers={answerSelectedObj}
             /> :
             <Intro
             handleClick={handleStartBtnClick}
