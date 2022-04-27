@@ -11,9 +11,12 @@ function App() {
     const [answerSelectedObj, setAnswerSelectObj] = React.useState({})
 
 
+    const bool = 'https://opentdb.com/api.php?amount=5&type=boolean'
+    const OPEN_DB_API_URL = "https://opentdb.com/api.php?amount=10&category=9"
+
     React.useEffect(() => {
         if(quiz){
-            fetch("https://opentdb.com/api.php?amount=10&category=9")
+            fetch(OPEN_DB_API_URL)
                 .then(res => res.json())
                 .then(data => setQuestions(data.results))
 
@@ -41,7 +44,16 @@ function App() {
         // console.log(questionObj)
         // console.log(correctAnswerObj)
         for (const [key, value] of Object.entries(questionObj)) {
-            if(value === correctAnswerObj[key]){
+            if(value === "True" || value === "False"){
+                const boolCorrectAnswer = value === correctAnswerObj[key]
+                if(boolCorrectAnswer){
+                    setCorrectAnswers(prevCorrectAnswers => prevCorrectAnswers + 1)
+                }
+                setAnswerSelectObj(prevAnswerObj =>
+                    ({...prevAnswerObj,
+                        [key]: boolCorrectAnswer}))
+            }
+            else if(value === correctAnswerObj[key]){
                 setCorrectAnswers(prevCorrectAnswers => prevCorrectAnswers + 1)
                 setAnswerSelectObj(prevAnswerObj =>
                     ({...prevAnswerObj,

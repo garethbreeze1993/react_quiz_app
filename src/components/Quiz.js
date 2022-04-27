@@ -5,6 +5,7 @@ export default function Quiz(props) {
     const [questionObj, setQuestionObj] = React.useState({});
     const [correctAnswerObj, setCorrectAnswerObj] = React.useState({})
 
+    // console.log('selectd ans')
     // console.log(props.selectedAnswers)
 
     React.useEffect(() => {
@@ -43,10 +44,37 @@ export default function Quiz(props) {
         })
     }
 
-    function getStyle(completed, checked, selectedAnswers, answer){
+    function getBoolStyle(questionText, selectedAnswers, checked, answer){
+        const correct = selectedAnswers[questionText]
+
+        // console.log(questionText)
+        // console.log(correct)
+        // console.log()
+
+        if (correct === undefined){
+            return answer === correctAnswerObj[questionText] ? {'backgroundColor': 'green'} : {}
+        }
+
+        if (correct && checked){
+            return {'backgroundColor': 'green'}
+        } else if(!correct && checked){
+            return {'backgroundColor': 'red'}
+        } else if (!correct && !checked){
+            return {'backgroundColor': 'green'}
+        } else if(correct && !checked){
+            return {}
+        }
+
+    }
+
+    function getStyle(completed, checked, selectedAnswers, answer, type, questionText){
         if(!completed){
             return {}
-        }else if(selectedAnswers[answer] === true){
+        }
+        else if (type !== 'multiple'){
+            return getBoolStyle(questionText, selectedAnswers, checked, answer)
+        }
+        else if(selectedAnswers[answer] === true){
             return {'backgroundColor': 'green'}
         }else if(checked){
             return {'backgroundColor': 'red'}
@@ -69,7 +97,8 @@ export default function Quiz(props) {
 
         const answerElements = setAnswers.map((answer, index) =>
             <div key={index} className={"quiz--answer"}
-                 style={getStyle(props.completed, questionObj[questionTxtQuote] === answer, props.selectedAnswers, answer)}>
+                 style={getStyle(props.completed, questionObj[questionTxtQuote] === answer,
+                     props.selectedAnswers, answer, question.type, questionTxtQuote)}>
                 <input
                     type="radio"
                     id={answer}
