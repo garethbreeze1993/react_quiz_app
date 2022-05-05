@@ -4,6 +4,7 @@ export default function Quiz(props) {
 
     const [questionObj, setQuestionObj] = React.useState({});
     const [correctAnswerObj, setCorrectAnswerObj] = React.useState({})
+    const [answersListForQ, setAnswersListForQ] = React.useState({})
 
     // console.log('selectd ans')
     // console.log(props.selectedAnswers)
@@ -25,6 +26,18 @@ export default function Quiz(props) {
     }, [props.questions])
 
     const buttonTxt = props.completed ? "Play Again?": "Check Answers"
+
+    // Look at cleanup when props.completed is changed i.e. the state vals at top
+
+    function insertRandomArr (arr, index, newItem) {
+        return [
+              // part of the array before the specified index
+              ...arr.slice(0, index),
+              // inserted item
+              newItem,
+              // part of the array after the specified index
+              ...arr.slice(index)]
+    }
 
     function removeQuote(question) {
         // Buggy way of removing quotes and apostrophes from the JSON
@@ -89,13 +102,36 @@ export default function Quiz(props) {
         let answers;
         if(question.type === 'multiple'){
             answers = question.incorrect_answers
-            answers.push(question.correct_answer)
+
+            const randomIndex = Math.floor(Math.random() * 4);
+
+            if(randomIndex === 3){
+                answers.push(question.correct_answer)
+            } else if(randomIndex === 0){
+                answers.unshift(question.correct_answer)
+            }
+            else{
+                answers = insertRandomArr(answers, randomIndex, question.correct_answer)
+            }
+
         }else{
             answers = ["True", "False"]
         }
+
         const setAnswers = [...new Set(answers)]
 
-        const answerElements = setAnswers.map((answer, index) =>
+        let cached = true
+        if(answersListForQ[questionTxtQuote] === undefined){
+            setAnswersListForQ(prevState => (
+            {...prevState,
+                [questionTxtQuote]: setAnswers
+            }))
+            cached = false
+        }
+
+        const answerArray = cached ? answersListForQ[questionTxtQuote] : setAnswers
+
+        const answerElements = answerArray.map((answer, index) =>
             <div key={index} className={"quiz--answer"}
                  style={getStyle(props.completed, questionObj[questionTxtQuote] === answer,
                      props.selectedAnswers, answer, question.type, questionTxtQuote)}>
