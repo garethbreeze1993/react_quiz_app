@@ -6,9 +6,6 @@ export default function Quiz(props) {
     const [correctAnswerObj, setCorrectAnswerObj] = React.useState({})
     const [answersListForQ, setAnswersListForQ] = React.useState({})
 
-    // console.log('selectd ans')
-    // console.log(props.selectedAnswers)
-
     React.useEffect(() => {
         props.questions.forEach(question => {
             const questionText = question.question
@@ -26,8 +23,6 @@ export default function Quiz(props) {
     }, [props.questions])
 
     const buttonTxt = props.completed ? "Play Again?": "Check Answers"
-
-    // Look at cleanup when props.completed is changed i.e. the state vals at top
 
     function insertRandomArr (arr, index, newItem) {
         return [
@@ -59,10 +54,6 @@ export default function Quiz(props) {
 
     function getBoolStyle(questionText, selectedAnswers, checked, answer){
         const correct = selectedAnswers[questionText]
-
-        // console.log(questionText)
-        // console.log(correct)
-        // console.log()
 
         if (correct === undefined){
             return answer === correctAnswerObj[questionText] ? {'backgroundColor': 'green'} : {}
@@ -152,9 +143,6 @@ export default function Quiz(props) {
 
         </div>
     })
-
-    // console.log(questionObj)
-
 
     return (
         <form onSubmit={(event) => props.handleSubmit(event, questionObj, correctAnswerObj)}>

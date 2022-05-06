@@ -9,9 +9,6 @@ function App() {
     const [questions, setQuestions] = React.useState([])
     const [correctAnswers, setCorrectAnswers] = React.useState(0);
     const [answerSelectedObj, setAnswerSelectObj] = React.useState({})
-
-
-    const bool = 'https://opentdb.com/api.php?amount=5&type=boolean'
     const OPEN_DB_API_URL = "https://opentdb.com/api.php?amount=10&category=9"
 
     React.useEffect(() => {
@@ -40,9 +37,6 @@ function App() {
 
     function handleSubmit(event, questionObj, correctAnswerObj){
         event.preventDefault();
-        // console.log('submitted')
-        // console.log(questionObj)
-        // console.log(correctAnswerObj)
         for (const [key, value] of Object.entries(questionObj)) {
             if(value === "True" || value === "False"){
                 const boolCorrectAnswer = value === correctAnswerObj[key]
