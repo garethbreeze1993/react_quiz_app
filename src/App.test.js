@@ -1,13 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import App from './App';
+import {useReducer} from "react";
+import userEvent from "@testing-library/user-event";
 
 const mockQuestionData = [{category: "General Knowledge",
     type: "multiple",
     difficulty: "easy",
-    correct_answer: "19",
-    incorrect_answers: ["2", "3", "4"],
-    question: "On a dartboard which number is opposite 17?"
+    correct_answer: "Budapest",
+    incorrect_answers: ["London", "Paris", "Berlin"],
+    question: "What is the capital city of Hungary?"
 }]
 
   beforeEach(() => {
@@ -38,7 +40,21 @@ test('check mock api response output to screen', async () => {
   await act(async () => render(<App />))
   await screen.getByText('Start Quiz')
   await act(async () => fireEvent.click(screen.getByText('Start Quiz')));
-  screen.debug();
+  // screen.debug();
+  expect(screen.getByRole('heading')).toHaveTextContent('What is the capital city of Hungary?');
+  const radioItems = await screen.findAllByRole('radio')
+  expect(radioItems).toHaveLength(4)
+})
+
+test('testing user selecting radio answer buttons on quiz screen', async() => {
+  await act(async () => render(<App />))
+  await screen.getByText('Start Quiz')
+  await act(async () => fireEvent.click(screen.getByText('Start Quiz')));
+  await act(async () => fireEvent.click(screen.getByLabelText('London')))
+  expect(screen.getByLabelText('London')).toBeChecked()
+  await act(async () => fireEvent.click(screen.getByLabelText('Budapest')));
+  expect(screen.getByLabelText('Budapest')).toBeChecked()
+  expect(screen.getByLabelText('London')).not.toBeChecked()
 })
 
 // up to React Testing Library: React Testing Library: Asynchronous / Async

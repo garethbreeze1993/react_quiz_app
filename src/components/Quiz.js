@@ -135,7 +135,7 @@ export default function Quiz(props) {
                     onChange={handleFormChange}
                     disabled={props.completed}
                 />
-                {removeQuote(answer)}
+                <label htmlFor={answer}>{removeQuote(answer)}</label>
             </div>)
         return <div key={index} className={"quiz--container"}>
             <h5 className={"quiz--question"}>{questionText}</h5>
