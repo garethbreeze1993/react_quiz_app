@@ -57,6 +57,43 @@ test('testing user selecting radio answer buttons on quiz screen', async() => {
   expect(screen.getByLabelText('London')).not.toBeChecked()
 })
 
+test('testing user selects incorrect answer and checks answers', async() => {
+  await act(async () => render(<App />))
+  await screen.getByText('Start Quiz')
+  await act(async () => fireEvent.click(screen.getByText('Start Quiz')));
+  await act(async () => fireEvent.click(screen.getByLabelText('London')))
+  expect(screen.getByLabelText('London')).toBeChecked();
+  await act(async () => fireEvent.click(screen.getByText('Check Answers')));
+  expect(screen.getByText('You scored 0 out of 1')).toBeInTheDocument();
+  expect(screen.getByLabelText('London')).toBeChecked();
+  expect(screen.getByText('London').closest("div")).toHaveStyle("background-color: red;");
+  expect(screen.getByText('Budapest').closest("div")).toHaveStyle("background-color: green;");
+})
+
+test('testing user select correct answer and checks answers', async() => {
+  await act(async () => render(<App />))
+  await screen.getByText('Start Quiz')
+  await act(async () => fireEvent.click(screen.getByText('Start Quiz')));
+  await act(async () => fireEvent.click(screen.getByLabelText('Budapest')))
+  expect(screen.getByLabelText('Budapest')).toBeChecked();
+  await act(async () => fireEvent.click(screen.getByText('Check Answers')));
+  expect(screen.getByText('You scored 1 out of 1')).toBeInTheDocument();
+  expect(screen.getByLabelText('Budapest')).toBeChecked();
+  expect(screen.getByText('Budapest').closest("div")).toHaveStyle("background-color: green;");
+})
+
+test('testing user clicks play again and gets sent back to intro screen', async() => {
+  await act(async () => render(<App />))
+  await screen.getByText('Start Quiz')
+  await act(async () => fireEvent.click(screen.getByText('Start Quiz')));
+  await act(async () => fireEvent.click(screen.getByLabelText('Budapest')))
+  await act(async () => fireEvent.click(screen.getByText('Check Answers')));
+  await act(async () => fireEvent.click(screen.getByText('Play Again?')));
+  expect(screen.getByText('Start Quiz')).toBeInTheDocument();
+  expect(screen.getByText('Quizzical')).toBeInTheDocument();
+  expect(screen.getByText('A fun quiz app built with React')).toBeInTheDocument();
+})
+
 // up to React Testing Library: React Testing Library: Asynchronous / Async
 // on https://www.robinwieruch.de/react-testing-library/
 
